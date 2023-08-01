@@ -24,7 +24,6 @@ print("Screen Resolution: " + str(w) + 'x' + str(h))
 
 #target window 
 hwnd=win32gui.FindWindow(None,windowName)
-hwnd=0x110284
 
 #display fps 
 def update_line(message):
@@ -36,7 +35,7 @@ needle_img = cv.imread('images/filtred_cabbage.jpg', cv.IMREAD_UNCHANGED)
 #filter
 filter=HsvFilter()
 
-filter.init_control_gui()
+# filter.init_control_gui()
 
 Hsv_filter=HsvFilter(34,45,85,47,147,255,4,25,41,0)
 
