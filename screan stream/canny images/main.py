@@ -30,10 +30,10 @@ def update_line(message):
     print(message, end='\r')
 
 #read target image
-needle_img = cv.imread('images/filtred_cabbage.jpg', cv.IMREAD_UNCHANGED)
+needle_img = cv.imread('images/edged_cabbage.jpg', cv.IMREAD_UNCHANGED)
 
 # filter.init_control_gui()
-filter=EdgeFilter()
+filter=EdgeFilter(2,1,1,48,280)
 
 filter.init_control_gui()
 
@@ -48,24 +48,26 @@ while True:
         #convert to array and convert from RGB to BGR
         screenshot=np.array(screenshot)
         screenshot=cv.cvtColor(screenshot, cv.COLOR_RGB2BGR)
-        
+                
         #apply filter
-        filtered_image=filter.apply_edge_filter(screenshot)
+        filtered_image=filter.apply_edge_filter(screenshot,filter)
         
-        #identify target positions
-        # rectangles=getRectangles(filtered_image,needle_img,0.32)
-        # click_points=getPoints(rectangles)
-        
-        # #draw information on screenshot
-        # template=drawRectangles(rectangles,screenshot)
-        # template=drawCrosshair(click_points,template)
-        
+        #get targets matches
+        kp1,kp2,matches,matchs_point= matchsPoints(filtered_image,needle_img)
+        result_template=cv.drawMatches(
+            needle_img,
+            kp1,
+            screenshot,
+            kp2,
+            matches,
+            None
+        )      
         
         #small image
-        # result_template=cv.resize(template,(0,0),fx=0.7,fy=0.7)
+        result_template=cv.resize(result_template,(0,0),fx=0.7,fy=0.7)
         result_filtered_image=cv.resize(filtered_image,(0,0),fx=0.6,fy=0.6)
         
-        # cv.imshow('Computer Vision',result_template)
+        cv.imshow('Computer Vision',result_template)
         cv.imshow('Computer Treatment',result_filtered_image)
             
         #show how much time tike 1 screenshot
