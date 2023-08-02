@@ -24,7 +24,7 @@ print("Screen Resolution: " + str(w) + 'x' + str(h))
 
 #target window 
 hwnd=win32gui.FindWindow(None,windowName)
-hwnd=0x140652
+hwnd=0x100600
 #display fps 
 def update_line(message):
     print(message, end='\r')
@@ -55,7 +55,7 @@ while True:
         filtered_image=filter.apply_hsv_filter(screenshot,Hsv_filter)
         
         #identify target positions
-        rectangles=getRectangles(filtered_image,needle_img,0.32)
+        rectangles=getRectangles(filtered_image,needle_img,0.324)
         click_points=getPoints(rectangles)
         
         #draw information on screenshot

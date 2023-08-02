@@ -5,9 +5,9 @@ from time import time
 from PIL import ImageGrab
 import win32gui
 from tools.windowCapture import WindowCapture
+from tools.edgeFilter import EdgeFilter
 from mss import mss
 from vision import *
-from tools.hsvFilter import HsvFilter
 
 #target window name
 windowName='Photos'
@@ -24,7 +24,7 @@ print("Screen Resolution: " + str(w) + 'x' + str(h))
 
 #target window 
 hwnd=win32gui.FindWindow(None,windowName)
-
+hwnd=0x1b063a
 #display fps 
 def update_line(message):
     print(message, end='\r')
@@ -32,12 +32,10 @@ def update_line(message):
 #read target image
 needle_img = cv.imread('images/filtred_cabbage.jpg', cv.IMREAD_UNCHANGED)
 
-#filter
-filter=HsvFilter()
-
 # filter.init_control_gui()
+filter=EdgeFilter()
 
-Hsv_filter=HsvFilter(34,45,85,47,147,255,4,25,41,0)
+filter.init_control_gui()
 
 loop_time=time()
 while True:
@@ -52,26 +50,26 @@ while True:
         screenshot=cv.cvtColor(screenshot, cv.COLOR_RGB2BGR)
         
         #apply filter
-        filtered_image=filter.apply_hsv_filter(screenshot,Hsv_filter)
+        filtered_image=filter.apply_edge_filter(screenshot)
         
         #identify target positions
-        rectangles=getRectangles(filtered_image,needle_img,0.32)
-        click_points=getPoints(rectangles)
+        # rectangles=getRectangles(filtered_image,needle_img,0.32)
+        # click_points=getPoints(rectangles)
         
-        #draw information on screenshot
-        template=drawRectangles(rectangles,screenshot)
-        template=drawCrosshair(click_points,template)
+        # #draw information on screenshot
+        # template=drawRectangles(rectangles,screenshot)
+        # template=drawCrosshair(click_points,template)
         
         
         #small image
-        result_template=cv.resize(template,(0,0),fx=0.7,fy=0.7)
+        # result_template=cv.resize(template,(0,0),fx=0.7,fy=0.7)
         result_filtered_image=cv.resize(filtered_image,(0,0),fx=0.6,fy=0.6)
         
-        cv.imshow('Computer Vision',result_template)
+        # cv.imshow('Computer Vision',result_template)
         cv.imshow('Computer Treatment',result_filtered_image)
             
         #show how much time tike 1 screenshot
-        update_line(f"FPS: {1/(time()-loop_time)} Delay:{time()-loop_time} points:{len(click_points)}")
+        update_line(f"FPS: {1/(time()-loop_time)} Delay:{time()-loop_time}")
         loop_time=time()
         
         if cv.waitKey(1)==ord('*'):
