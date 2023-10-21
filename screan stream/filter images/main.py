@@ -4,9 +4,10 @@ import pyautogui
 from time import time
 from PIL import ImageGrab
 import win32gui
-from tools.windowCapture import WindowCapture
 from mss import mss
 from vision import *
+from tools.windowCapture import WindowCapture
+
 from tools.hsvFilter import HsvFilter
 
 #target window name
